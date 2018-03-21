@@ -82,6 +82,20 @@ f.advanced() {
       }
     }
   }
+  f.entry(field: "whiteListSourceBranches", title: _("Whitelist Source Branches:")) {
+    f.repeatable(field: "whiteListSourceBranches", minimum: "1", add: "Add Branch") {
+      table(width: "100%") {
+        f.entry(field: "branch") {
+          f.textbox() 
+        }
+        f.entry(title: "") {
+          div(align: "right") {
+            f.repeatableDeleteButton(value: "Delete Branch") 
+          }
+        }
+      }
+    }
+  }  
   f.entry(field: "includedRegions", title: _("Included regions")) {
     f.textarea()
   }

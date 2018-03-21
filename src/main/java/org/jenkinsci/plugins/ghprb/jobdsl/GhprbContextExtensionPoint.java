@@ -33,6 +33,7 @@ public class GhprbContextExtensionPoint extends ContextExtensionPoint {
                 null,
                 context.skipBuildPhrase,
                 context.blackListCommitAuthor,
+                context.whiteListSourceBranches,
                 context.whiteListTargetBranches,
                 context.blackListTargetBranches,
                 context.allowMembersOfWhitelistedOrgsAsAdmin,

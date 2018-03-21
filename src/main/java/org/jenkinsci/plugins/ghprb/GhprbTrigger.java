@@ -115,6 +115,8 @@ public class GhprbTrigger extends GhprbTriggerBackwardsCompatible {
 
     private Boolean displayBuildErrorsOnDownstreamBuilds;
 
+    private List<GhprbBranch> whiteListSourceBranches;
+
     private List<GhprbBranch> whiteListTargetBranches;
 
     private List<GhprbBranch> blackListTargetBranches;
@@ -186,6 +188,7 @@ public class GhprbTrigger extends GhprbTriggerBackwardsCompatible {
                         String commentFilePath,
                         String skipBuildPhrase,
                         String blackListCommitAuthor,
+                        List<GhprbBranch> whiteListSourceBranches,
                         List<GhprbBranch> whiteListTargetBranches,
                         List<GhprbBranch> blackListTargetBranches,
                         Boolean allowMembersOfWhitelistedOrgsAsAdmin,
@@ -213,6 +216,7 @@ public class GhprbTrigger extends GhprbTriggerBackwardsCompatible {
         this.displayBuildErrorsOnDownstreamBuilds = displayBuildErrorsOnDownstreamBuilds;
         this.skipBuildPhrase = skipBuildPhrase;
         this.blackListCommitAuthor = blackListCommitAuthor;
+        this.whiteListSourceBranches = whiteListSourceBranches;
         this.whiteListTargetBranches = whiteListTargetBranches;
         this.blackListTargetBranches = blackListTargetBranches;
         this.gitHubAuthId = gitHubAuthId;
@@ -639,6 +643,18 @@ public class GhprbTrigger extends GhprbTriggerBackwardsCompatible {
         }
     }
 
+    private List<GhprbBranch> normalizeSourceBranches(List<GhprbBranch> branches) {
+        if (branches == null || (branches.size() == 1 && branches.get(0).getBranch().equals(""))) {
+            return new ArrayList<GhprbBranch>();
+        } else {
+            return branches;
+        }
+    }
+
+    public List<GhprbBranch> getWhiteListSourceBranches() {
+        return normalizeSourceBranches(whiteListSourceBranches);
+    }
+
     public List<GhprbBranch> getWhiteListTargetBranches() {
         return normalizeTargetBranches(whiteListTargetBranches);
     }
@@ -785,6 +801,8 @@ public class GhprbTrigger extends GhprbTriggerBackwardsCompatible {
         private Boolean manageWebhooks = true;
 
         private GHCommitState unstableAs = GHCommitState.FAILURE;
+
+        private List<GhprbBranch> whiteListSourceBranches;
 
         private List<GhprbBranch> whiteListTargetBranches;
 
@@ -1100,6 +1118,10 @@ public class GhprbTrigger extends GhprbTriggerBackwardsCompatible {
             }
 
             return projects;
+        }
+
+        public List<GhprbBranch> getWhiteListSourceBranches() {
+            return whiteListSourceBranches;
         }
 
         public List<GhprbBranch> getWhiteListTargetBranches() {

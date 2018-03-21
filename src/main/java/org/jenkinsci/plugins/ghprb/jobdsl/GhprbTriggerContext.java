@@ -14,6 +14,8 @@ class GhprbTriggerContext implements Context {
 
     List<String> orgWhitelist = new ArrayList<String>();
 
+    List<GhprbBranch> whiteListSourceBranches = new ArrayList<GhprbBranch>();
+
     List<GhprbBranch> whiteListTargetBranches = new ArrayList<GhprbBranch>();
 
     List<GhprbBranch> blackListTargetBranches = new ArrayList<GhprbBranch>();
@@ -115,6 +117,13 @@ class GhprbTriggerContext implements Context {
     /**
      * Add branch names whose they are considered whitelisted for this specific job
      */
+    public void whiteListSourceBranch(String branch) {
+        whiteListSourceBranches.add(new GhprbBranch(branch));
+    }
+
+    /**
+     * Add branch names whose they are considered whitelisted for this specific job
+     */
     public void whiteListTargetBranches(Iterable<String> branches) {
         for (String branch : branches) {
             whiteListTargetBranches.add(new GhprbBranch(branch));
@@ -127,6 +136,15 @@ class GhprbTriggerContext implements Context {
     public void blackListTargetBranches(Iterable<String> branches) {
         for (String branch : branches) {
             blackListTargetBranches.add(new GhprbBranch(branch));
+        }
+    }
+
+    /**
+     * Add branch names whose they are considered whitelisted for this specific job
+     */
+    public void whiteListSourceBranches(Iterable<String> branches) {
+        for (String branch : branches) {
+            whiteListSourceBranches.add(new GhprbBranch(branch));
         }
     }
 

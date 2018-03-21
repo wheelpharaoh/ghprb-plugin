@@ -300,6 +300,10 @@ public class Ghprb {
         return trigger.getWhiteListTargetBranches();
     }
 
+    List<GhprbBranch> getWhiteListSourceBranches() {
+        return trigger.getWhiteListSourceBranches();
+    }
+
     public List<Pattern> getIncludedRegionPatterns() {
         List<String> regions = Arrays.asList(trigger.getIncludedRegions().split("\\s+"));
         List<Pattern> patterns = new ArrayList<Pattern>(regions.size());

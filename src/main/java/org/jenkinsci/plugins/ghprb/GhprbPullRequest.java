@@ -440,6 +440,29 @@ public class GhprbPullRequest {
         return true;
     }
 
+    // Determines whether a branch is an allowed source branch
+    //
+    // A branch is an allowed source branch if it matches a branch in the whitelist
+    // ...
+    public boolean isAllowedSourceBranch() {
+        List<GhprbBranch> whiteListBranches = helper.getWhiteListSourceBranches();
+
+        String target = getTarget();
+
+        // First check if it matches any whitelist branch.  It matches if
+        // the list is empty, or if it matches any branch in the list
+        if (!whiteListBranches.isEmpty()) {
+            if (!matchesAnyBranch(target, whiteListBranches)) {
+                LOGGER.log(Level.FINEST,
+                        "PR #{0} source branch: {1} isn''t in our whitelist of source branches: {2}",
+                        new Object[] {id, target, Joiner.on(',').skipNulls().join(whiteListBranches)});
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private GitUser getPRCommitAuthor() {
         try {
             for (GHPullRequestCommitDetail commitDetails : pr.listCommits()) {
@@ -525,9 +548,14 @@ public class GhprbPullRequest {
             triggered = false; // Once we have decided that we are triggered then the flag should be set to false.
 
             if (!isAllowedTargetBranch()) {
-                LOGGER.log(Level.FINEST, "Branch is not whitelisted or is blacklisted, skipping the build");
+                LOGGER.log(Level.FINEST, "Target-Branch is not whitelisted or is blacklisted, skipping the build");
                 return;
             }
+
+            if (!isAllowedSourceBranch()) {
+                LOGGER.log(Level.FINEST, "Source-Branch is not whitelisted or is blacklisted, skipping the build");
+                return;
+            }            
 
             if (shouldRun && !containsWatchedPaths(pr)) {
                 LOGGER.log(Level.FINEST, "Pull request contains no watched paths, skipping the build");
